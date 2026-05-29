@@ -301,15 +301,34 @@
             </p>
             
             <div class="flex gap-6 flex-1 min-h-0">
-                <!-- 22页画册叠放 -->
-                <div class="flex-1 flex flex-col h-full">
-                    <div class="tag w-max bg-indigo-50 shrink-0">画册 A (定稿 22 页)</div>
-                    <div class="stack-container" id="stack-book-a"></div>
+                <!-- 22页画册：Hello Summer -->
+                <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0">Hello Summer</div>
+                    <!-- 封面大图 -->
+                    <img src="ext_bookA_1.png" class="w-full aspect-[2666/1500] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'">
+                    <!-- 内部页面网格 -->
+                    <div class="grid grid-cols-7 gap-1.5 flex-1 content-start overflow-hidden">
+                        <script>
+                            for(let i=2; i<=22; i++) {
+                                document.write(`<img src="ext_bookA_${i}.png" class="w-full aspect-[2666/1500] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'">`);
+                            }
+                        </script>
+                    </div>
                 </div>
-                <!-- 16页画册叠放 -->
-                <div class="flex-1 flex flex-col h-full">
-                    <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0">画册 B (定稿 16 页)</div>
-                    <div class="stack-container" id="stack-book-b"></div>
+
+                <!-- 16页画册：小喫一夏 -->
+                <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0">小喫一夏</div>
+                    <!-- 封面大图 -->
+                    <img src="ext_bookB_1.png" class="w-full aspect-[2338/1653] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'">
+                    <!-- 内部页面网格 -->
+                    <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-hidden">
+                        <script>
+                            for(let i=2; i<=16; i++) {
+                                document.write(`<img src="ext_bookB_${i}.png" class="w-full aspect-[2338/1653] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'">`);
+                            }
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
@@ -341,13 +360,24 @@
                     </div>
                 </div>
 
-                <!-- 下部分：成品杂乱叠放 -->
+                <!-- 下部分：成品矩阵排列 -->
                 <div class="flex-1 bg-white rounded-2xl border border-slate-200 p-4 relative overflow-hidden flex flex-col min-h-0">
-                    <div class="flex justify-between items-center mb-2 z-20 relative shrink-0">
-                        <div class="tag bg-slate-100 text-slate-600">最终成品资产库 (共 18 张)</div>
-                        <span class="text-xs text-slate-400">海量视觉堆叠</span>
+                    <div class="flex justify-between items-center mb-3 z-20 relative shrink-0">
+                        <div class="tag bg-slate-100 text-slate-600 mb-0">最终成品资产库</div>
+                        <span class="text-xs text-slate-400">规律矩阵排列</span>
                     </div>
-                    <div class="flex-1 relative w-full h-full" id="stack-ip-assets"></div>
+                    <!-- 使用标准网格 6列 x 3行 -->
+                    <div class="grid grid-cols-6 grid-rows-3 gap-2 flex-1 w-full h-full min-h-0" id="grid-ip-assets">
+                        <script>
+                            for(let i=1; i<=18; i++) {
+                                // 使用 object-cover 确保无论原图横竖都能漂亮地填满格子
+                                document.write(`
+                                <div class="w-full h-full">
+                                    <img src="ip_anim_${i}.jpg" class="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200" onerror="this.style.display='none'">
+                                </div>`);
+                            }
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
@@ -386,13 +416,13 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-2 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
                     
-                    <div class="absolute inset-x-5 top-24 bottom-5" id="stack-match-look"></div>
+                    <div class="absolute inset-x-5 top-24 bottom-5 stack-container bg-transparent border-none" id="stack-match-look"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script: 处理打印友好的堆叠效果 -->
+    <!-- Script: 处理打印友好的堆叠效果 (仅用于未做网格化的堆叠容器) -->
     <script>
         function renderPrintSafeStack(containerId, prefix, count, ratio, config={}) {
             const container = document.getElementById(containerId);
@@ -413,15 +443,6 @@
                 let rotate = (Math.random() * 30) - 15;
                 let zIndex = i;
 
-                // 对画册的封面（第1张）做放大与置顶的高亮处理
-                if (config.highlightCover && i === 1) {
-                    currentWPercent = wPercent * 1.35; // 放大 1.35 倍
-                    left = 5;
-                    top = 5;
-                    rotate = -3; // 封面轻微倾斜
-                    zIndex = 999; // 绝对置顶
-                }
-
                 img.style.width = currentWPercent + '%';
                 img.style.aspectRatio = isWide ? '16/9' : '9/16';
                 img.style.left = left + '%';
@@ -434,41 +455,8 @@
             }
         }
 
-        // 1. 画册A (使用 png，并高亮封面)
-        renderPrintSafeStack('stack-book-a', 'ext_bookA_', 22, '16:9', { wPercent: 55, maxTop: 45, ext: 'png', highlightCover: true });
-        
-        // 2. 画册B (使用 png，并高亮封面)
-        renderPrintSafeStack('stack-book-b', 'ext_bookB_', 16, '16:9', { wPercent: 55, maxTop: 45, ext: 'png', highlightCover: true });
-        
-        // 3. 小女孩换装 
+        // 小女孩换装堆叠 (仅保留此项，画册与IP资产已重构为规范网格)
         renderPrintSafeStack('stack-match-look', 'match_look_', 30, '9:16', { wPercent: 20, maxTop: 30 });
-
-        // 4. IP 成品特制叠放
-        const ipContainer = document.getElementById('stack-ip-assets');
-        if (ipContainer) {
-            for(let i=1; i<=18; i++) {
-                const img = document.createElement('img');
-                const isWide = i <= 10;
-                img.src = `ip_anim_${i}.jpg`; 
-                img.className = 'stack-img shadow-md border-2 border-white';
-                
-                const wPercent = isWide ? 35 : 18;
-                img.style.width = wPercent + '%';
-                img.style.aspectRatio = isWide ? '16/9' : '9/16';
-                
-                const left = Math.random() * (100 - wPercent - 2);
-                const top = Math.random() * 50;
-                const rotate = (Math.random() * 40) - 20;
-
-                img.style.left = left + '%';
-                img.style.top = top + '%';
-                img.style.transform = `rotate(${rotate}deg)`;
-                img.style.zIndex = i;
-                
-                img.onerror = function() { this.remove(); };
-                ipContainer.appendChild(img);
-            }
-        }
     </script>
 
 </body>
