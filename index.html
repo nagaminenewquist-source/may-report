@@ -35,6 +35,10 @@
             .page:last-child { 
                 page-break-after: auto; 
             }
+            /* 打印时隐藏图片放大模态框 */
+            #lightbox-modal {
+                display: none !important;
+            }
         }
 
         /* ----------------------------------------------------
@@ -123,38 +127,56 @@
             margin-right: 0.5rem;
         }
 
-        .stack-container {
-            position: relative;
-            flex: 1;
+        /* 隐藏滚动条 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 图片全局鼠标样式 */
+        img:not(.pointer-events-none) {
+            cursor: zoom-in;
+            transition: opacity 0.2s;
+        }
+        img:not(.pointer-events-none):hover {
+            opacity: 0.9;
+        }
+
+        /* 瀑布流行容器 */
+        .masonry-row {
+            display: flex;
             width: 100%;
-            background: #f8fafc;
-            border-radius: 1rem;
-            border: 1px dashed #cbd5e1;
-            overflow: hidden;
-            min-height: 0; 
+            gap: 6px;
+            margin-bottom: 6px;
         }
-        
-        .stack-img {
-            position: absolute;
-            border: 4px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            border-radius: 8px;
-            object-fit: cover;
+        .masonry-item {
+            position: relative;
             background: #fff;
-            transition: transform 0.3s ease;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
         }
-        
-        .stack-img:hover {
-            z-index: 9999 !important;
-            transform: scale(1.05) !important;
+        .masonry-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 确保显示完全 */
+            padding: 2px;
         }
+
     </style>
 </head>
 <body>
 
+    <!-- 图片放大模态框 -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 cursor-zoom-out" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg pointer-events-none" alt="Enlarged View">
+        <div class="absolute top-4 right-4 text-white text-3xl font-bold bg-black/50 w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/80 transition-colors pointer-events-auto" onclick="closeLightbox()">×</div>
+    </div>
+
     <!-- ==================== 第 1 页：封面 & 基建 ==================== -->
     <div class="page">
-        <!-- 封面 Header -->
         <header class="glass-card mb-4 shrink-0" style="padding: 1.5rem;">
             <div class="flex justify-between items-center">
                 <div>
@@ -205,7 +227,7 @@
                         </ul>
                     </div>
                     <div class="w-1/2 flex items-center justify-center relative bg-slate-50 rounded-xl border border-slate-100 p-2">
-                        <img src="说明.png" class="absolute inset-0 w-full h-full object-contain p-2" alt="插件说明" onerror="this.style.display='none'">
+                        <img src="说明.png" class="absolute inset-0 w-full h-full object-contain p-2 hover:opacity-100" alt="插件说明" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
                     </div>
                 </div>
             </div>
@@ -231,54 +253,54 @@
                     </p>
                 </div>
 
-                <!-- 截图展示区 (双行布局放大显示) -->
+                <!-- 截图展示区 -->
                 <div class="flex flex-1 gap-4 bg-slate-900 rounded-[1.5rem] p-4 relative overflow-hidden min-h-0">
                     <div class="absolute top-[-50%] left-[-20%] w-96 h-96 bg-orange-500/20 rounded-full blur-[80px]"></div>
                     <div class="absolute bottom-[-50%] right-[-20%] w-96 h-96 bg-blue-500/20 rounded-full blur-[80px]"></div>
                     
-                    <!-- 左侧：UI 界面流 7张图 (2行 x 4列 网格) -->
+                    <!-- 左侧：UI 界面流 -->
                     <div class="flex-[6] grid grid-cols-4 grid-rows-2 gap-x-3 gap-y-1 z-10 h-full min-h-0">
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_1.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI1'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">开屏1</span>
+                            <img src="h5_ui_1.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI1'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">开屏1</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_2.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI2'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">开屏2</span>
+                            <img src="h5_ui_2.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI2'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">开屏2</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_3.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI3'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">上传</span>
+                            <img src="h5_ui_3.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI3'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">上传</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_4.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI4'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">选身份</span>
+                            <img src="h5_ui_4.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI4'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">选身份</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_5.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI5'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">选衣服1</span>
+                            <img src="h5_ui_5.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI5'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">选衣服1</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_6.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI6'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">选衣服2</span>
+                            <img src="h5_ui_6.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI6'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">选衣服2</span>
                         </div>
                         <div class="flex flex-col items-center justify-center h-full min-h-0">
-                            <img src="h5_ui_7.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI7'">
-                            <span class="text-slate-400 text-[9px] mt-1 shrink-0">处理</span>
+                            <img src="h5_ui_7.png" class="max-h-full max-w-full rounded-[8px] shadow-sm border border-slate-700 object-contain" onerror="this.src='https://placehold.co/360x640/1e293b/fff?text=UI7'" onclick="openLightbox(this.src)">
+                            <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">处理</span>
                         </div>
                     </div>
 
                     <!-- 分割线 -->
                     <div class="w-px bg-slate-700 z-10 shrink-0"></div>
 
-                    <!-- 右侧：3:4 最终效果图 (2行 x 2列 网格) -->
+                    <!-- 右侧：3:4 最终效果图 -->
                     <div class="flex-[4] grid grid-cols-2 grid-rows-2 gap-x-3 gap-y-1 z-10 h-full min-h-0">
                         <script>
                             for(let i=1; i<=4; i++) {
                                 document.write(`
                                 <div class="flex flex-col items-center justify-center h-full min-h-0">
-                                    <img src="h5_result_${i}.jpg" class="max-h-full max-w-full rounded-[8px] shadow-md border-2 border-orange-500/50 object-contain" onerror="this.src='https://placehold.co/600x800/ff5a00/fff?text=Result+${i}'">
-                                    <span class="text-slate-400 text-[9px] mt-1 shrink-0">合成结果</span>
+                                    <img src="h5_result_${i}.jpg" class="max-h-full max-w-full rounded-[8px] shadow-md border-2 border-orange-500/50 object-contain" onerror="this.src='https://placehold.co/600x800/ff5a00/fff?text=Result+${i}'" onclick="openLightbox(this.src)">
+                                    <span class="text-slate-400 text-[9px] mt-1 shrink-0 pointer-events-none">合成结果</span>
                                 </div>`);
                             }
                         </script>
@@ -291,41 +313,45 @@
 
     <!-- ==================== 第 3 页：外部画册定稿 ==================== -->
     <div class="page">
-        <div class="glass-card flex-1 min-h-0">
+        <div class="glass-card flex-1 min-h-0 flex flex-col">
             <div class="section-title shrink-0">
                 <i class="fas fa-book-open"></i>
                 <span>四、 视觉支持：外部画册对接与定稿使用</span>
             </div>
-            <p class="text-slate-600 text-sm mb-4 shrink-0">
+            <p class="text-slate-600 text-sm mb-3 shrink-0">
                 高质量承接外部画册视觉需求，本月顺利完成并定稿两本核心画册资产，分别包含 22 页与 16 页的精细化排版输出。
             </p>
             
             <div class="flex gap-6 flex-1 min-h-0">
                 <!-- 22页画册：Hello Summer -->
-                <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                    <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0">Hello Summer</div>
-                    <!-- 封面大图 (完美自适应比例) -->
-                    <img src="ext_bookA_1.png" class="w-full aspect-[2666/1500] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'">
+                <div class="flex-1 flex flex-col min-h-0 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0 mb-3">Hello Summer</div>
+                    <!-- 封面大图 (完美自适应不裁剪) -->
+                    <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
+                         <img src="ext_bookA_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'" onclick="openLightbox(this.src)">
+                    </div>
                     <!-- 内部页面网格 -->
-                    <div class="grid grid-cols-7 gap-1.5 flex-1 content-start overflow-hidden">
+                    <div class="grid grid-cols-7 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=22; i++) {
-                                document.write(`<img src="ext_bookA_${i}.png" class="w-full aspect-[2666/1500] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'">`);
+                                document.write(`<img src="ext_bookA_${i}.png" class="w-full aspect-[2666/1500] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'" onclick="openLightbox(this.src)">`);
                             }
                         </script>
                     </div>
                 </div>
 
                 <!-- 16页画册：小喫一夏 -->
-                <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                    <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0">小喫一夏</div>
-                    <!-- 封面大图 (完美自适应比例) -->
-                    <img src="ext_bookB_1.png" class="w-full aspect-[2338/1653] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'">
+                <div class="flex-1 flex flex-col min-h-0 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0 mb-3">小喫一夏</div>
+                    <!-- 封面大图 -->
+                    <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
+                         <img src="ext_bookB_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'" onclick="openLightbox(this.src)">
+                    </div>
                     <!-- 内部页面网格 -->
-                    <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-hidden">
+                    <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=16; i++) {
-                                document.write(`<img src="ext_bookB_${i}.png" class="w-full aspect-[2338/1653] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'">`);
+                                document.write(`<img src="ext_bookB_${i}.png" class="w-full aspect-[2338/1653] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'" onclick="openLightbox(this.src)">`);
                             }
                         </script>
                     </div>
@@ -337,7 +363,7 @@
 
     <!-- ==================== 第 4 页：自有 IP 画册与动画 ==================== -->
     <div class="page">
-        <div class="glass-card flex-1 min-h-0">
+        <div class="glass-card flex-1 min-h-0 flex flex-col">
             <div class="section-title shrink-0">
                 <i class="fas fa-paint-roller"></i>
                 <span>五、 自有资产：IP 画册统筹与动画创作</span>
@@ -345,38 +371,28 @@
             
             <div class="flex flex-col flex-1 min-h-0 gap-4 mt-2">
                 <!-- 上部分：工作流截图展示 -->
-                <div class="flex gap-4 h-1/2 shrink-0">
+                <div class="flex gap-4 h-1/3 shrink-0">
                     <div class="w-1/2 bg-slate-50 rounded-2xl border border-slate-200 p-4 flex flex-col relative overflow-hidden">
-                        <div class="tag bg-white text-xs mb-2 w-max shrink-0 relative z-10">画册排版工作流</div>
+                        <div class="tag bg-white text-xs mb-2 w-max shrink-0 relative z-10 pointer-events-none">画册排版工作流</div>
                         <div class="absolute inset-0 top-12 p-4">
-                            <img src="ip_catalog_workspace.png" class="w-full h-full object-cover rounded-xl shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Catalog+Workspace'">
+                            <img src="ip_catalog_workspace.png" class="w-full h-full object-cover rounded-xl shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Catalog+Workspace'" onclick="openLightbox(this.src)">
                         </div>
                     </div>
                     <div class="w-1/2 bg-slate-50 rounded-2xl border border-slate-200 p-4 flex flex-col relative overflow-hidden">
-                        <div class="tag bg-white text-xs mb-2 w-max shrink-0 relative z-10">动画节点编辑流</div>
+                        <div class="tag bg-white text-xs mb-2 w-max shrink-0 relative z-10 pointer-events-none">动画节点编辑流</div>
                         <div class="absolute inset-0 top-12 p-4">
-                            <img src="ip_animation_workspace.png" class="w-full h-full object-cover rounded-xl shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Animation+Nodes'">
+                            <img src="ip_animation_workspace.png" class="w-full h-full object-cover rounded-xl shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Animation+Nodes'" onclick="openLightbox(this.src)">
                         </div>
                     </div>
                 </div>
 
-                <!-- 下部分：成品矩阵排列 -->
-                <div class="flex-1 bg-white rounded-2xl border border-slate-200 p-4 relative overflow-hidden flex flex-col min-h-0">
-                    <div class="flex justify-between items-center mb-3 z-20 relative shrink-0">
-                        <div class="tag bg-slate-100 text-slate-600 mb-0">最终成品资产库</div>
-                        <span class="text-xs text-slate-400">规律矩阵排列</span>
-                    </div>
-                    <!-- 使用标准网格 6列 x 3行 -->
-                    <div class="grid grid-cols-6 grid-rows-3 gap-2 flex-1 w-full h-full min-h-0" id="grid-ip-assets">
-                        <script>
-                            for(let i=1; i<=18; i++) {
-                                // 使用 object-cover 确保无论原图横竖都能漂亮地填满格子
-                                document.write(`
-                                <div class="w-full h-full">
-                                    <img src="ip_anim_${i}.png" class="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200" onerror="this.style.display='none'">
-                                </div>`);
-                            }
-                        </script>
+                <!-- 下部分：动态排布成品库 -->
+                <div class="flex-1 bg-slate-100 rounded-2xl border border-slate-200 p-4 relative flex flex-col min-h-0">
+                    <div class="tag bg-white text-slate-600 mb-3 shrink-0 pointer-events-none w-max">最终成品资产库</div>
+                    
+                    <!-- 动态瀑布流容器 -->
+                    <div class="flex-1 w-full overflow-y-auto no-scrollbar" id="ip-masonry-container">
+                        <!-- JS 将在此动态构建基于比例的行 -->
                     </div>
                 </div>
             </div>
@@ -386,7 +402,7 @@
 
     <!-- ==================== 第 5 页：卖火柴的小女孩 ==================== -->
     <div class="page">
-        <div class="glass-card flex-1 min-h-0">
+        <div class="glass-card flex-1 min-h-0 flex flex-col">
             <div class="section-title shrink-0">
                 <i class="fas fa-fire"></i>
                 <span>六、 专项视觉：“卖火柴的小女孩”玩具羽绒项目</span>
@@ -395,12 +411,12 @@
             <div class="flex flex-col flex-1 min-h-0 gap-4 mt-2">
                 <!-- 上部分：漫画织唛 -->
                 <div class="shrink-0">
-                    <div class="tag bg-rose-50 text-rose-600 border-rose-200 mb-2">漫画风格织唛设计</div>
+                    <div class="tag bg-rose-50 text-rose-600 border-rose-200 mb-2 pointer-events-none">漫画风格织唛设计</div>
                     <p class="text-xs text-slate-500 mb-3">结合经典童话故事，创新设计漫画质感的服装织唛，提升玩具羽绒产品的情绪价值。</p>
                     <div class="flex overflow-hidden gap-3 px-1 py-1 h-[110px]">
                         <script>
                             for(let i=1; i<=7; i++) {
-                                document.write(`<img src="match_label_${i}.png" class="flex-1 h-full w-auto object-cover rounded-xl shadow-sm border border-slate-200 min-w-0" onerror="this.style.display='none'">`);
+                                document.write(`<img src="match_label_${i}.png" class="flex-1 h-full w-auto object-cover rounded-xl shadow-sm border border-slate-200 min-w-0" onerror="this.style.display='none'" onclick="openLightbox(this.src)">`);
                             }
                         </script>
                     </div>
@@ -408,55 +424,111 @@
 
                 <hr class="border-slate-100 shrink-0 my-2">
 
-                <!-- 下部分：线稿换装叠放 -->
+                <!-- 下部分：线稿换装 网格排列 -->
                 <div class="flex-1 flex flex-col bg-slate-50 rounded-[1.5rem] p-5 border border-slate-200 relative min-h-0">
                     <div class="flex justify-between items-start mb-2 relative z-20 shrink-0">
-                        <div class="tag bg-white">故事场景线稿图换装</div>
-                        <span class="text-xs font-bold text-slate-400">海量视觉支持</span>
+                        <div class="tag bg-white pointer-events-none">故事场景线稿图换装</div>
+                        <span class="text-xs font-bold text-slate-400 pointer-events-none">海量视觉支持</span>
                     </div>
-                    <p class="text-xs text-slate-500 mb-2 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
+                    <p class="text-xs text-slate-500 mb-3 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
                     
-                    <div class="absolute inset-x-5 top-24 bottom-5 stack-container bg-transparent border-none" id="stack-match-look"></div>
+                    <!-- 使用致密网格排列，不再堆叠 -->
+                    <div class="grid grid-cols-10 gap-2 overflow-y-auto no-scrollbar flex-1 pb-2">
+                         <script>
+                            for(let i=1; i<=30; i++) {
+                                document.write(`
+                                <div class="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm aspect-[9/16]">
+                                    <img src="match_look_${i}.png" class="w-full h-full object-cover" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
+                                </div>
+                                `);
+                            }
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script: 处理打印友好的堆叠效果 (仅用于未做网格化的堆叠容器) -->
+    <!-- Script: 处理 Lightbox 和 IP瀑布流排版 -->
     <script>
-        function renderPrintSafeStack(containerId, prefix, count, ratio, config={}) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            const isWide = ratio === '16:9';
-            const wPercent = config.wPercent || (isWide ? 60 : 30); 
-            const ext = config.ext || 'png';
-            
-            for(let i=1; i<=count; i++) {
-                const img = document.createElement('img');
-                img.src = `${prefix}${i}.${ext}`; 
-                img.className = 'stack-img';
-                
-                let currentWPercent = wPercent;
-                let left = 2 + (Math.random() * (100 - wPercent - 5));
-                let top = 2 + (Math.random() * (config.maxTop || 50));
-                let rotate = (Math.random() * 30) - 15;
-                let zIndex = i;
 
-                img.style.width = currentWPercent + '%';
-                img.style.aspectRatio = isWide ? '16/9' : '9/16';
-                img.style.left = left + '%';
-                img.style.top = top + '%';
-                img.style.transform = `rotate(${rotate}deg)`;
-                img.style.zIndex = zIndex;
-                
-                img.onerror = function() { this.remove(); };
-                container.appendChild(img);
-            }
+        // 1. 全局图片放大镜逻辑 (Lightbox)
+        function openLightbox(src) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            modal.classList.remove('hidden');
+            // 防止背景滚动
+            document.body.style.overflow = 'hidden'; 
         }
 
-        // 小女孩换装堆叠 (仅保留此项，画册与IP资产已重构为规范网格)
-        renderPrintSafeStack('stack-match-look', 'match_look_', 30, '9:16', { wPercent: 20, maxTop: 30 });
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            document.getElementById('lightbox-img').src = '';
+        }
+
+        // 2. 第4页：IP 画册动态 Flex 布局计算
+        // 目标：根据图片的宽/高比，动态计算它们在一行中的 flex-basis，使其等高并填满。
+        document.addEventListener('DOMContentLoaded', () => {
+            const ipContainer = document.getElementById('ip-masonry-container');
+            if (!ipContainer) return;
+
+            // 根据您的截图，定义这 18 张图的大致宽/高比
+            // 横图：5, 12, 15, 16
+            const aspectRatios = [];
+            for (let i = 1; i <= 18; i++) {
+                let ratio = 0.75; // 默认竖图比例 3:4 或更窄
+                if ([5, 12, 15, 16].includes(i)) {
+                    ratio = 1.77; // 横图 16:9
+                }
+                aspectRatios.push({ id: i, ratio: ratio });
+            }
+
+            // 为了美观，打乱顺序并尝试组合，使得每行的总宽高比在一个合理范围内
+            // 简单起见，这里按顺序每 6 个一组（混合排列），您可自行调整
+            
+            // 手动设定较好的分组：横竖搭配
+            const rows = [
+                [1, 2, 5, 3, 4],       // 含1横
+                [6, 7, 8, 12, 9],      // 含1横
+                [10, 11, 15, 16],      // 含2横
+                [13, 14, 17, 18]       // 全竖
+            ];
+
+            rows.forEach(rowIds => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'masonry-row';
+                
+                // 计算该行总宽高比
+                let totalRatio = 0;
+                const rowData = rowIds.map(id => {
+                    const data = aspectRatios.find(a => a.id === id);
+                    totalRatio += data.ratio;
+                    return data;
+                });
+
+                // 创建图片容器
+                rowData.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'masonry-item';
+                    
+                    // 根据比例分配宽度百分比
+                    const widthPercent = (item.ratio / totalRatio) * 100;
+                    itemDiv.style.flex = `0 0 calc(${widthPercent}% - 6px)`; // 减去 gap 的影响
+                    
+                    // 容器本身需要一个占位高度，通过 padding-bottom 实现 (基于该行总比例)
+                    // 或者依赖图片内容撑开。这里用基于父宽度的 aspect-ratio
+                    itemDiv.style.aspectRatio = item.ratio;
+
+                    itemDiv.innerHTML = `<img src="ip_book_${item.id}.png" onerror="this.closest('.masonry-item').style.display='none'" onclick="openLightbox(this.src)">`;
+                    rowDiv.appendChild(itemDiv);
+                });
+
+                ipContainer.appendChild(rowDiv);
+            });
+        });
     </script>
 
 </body>
