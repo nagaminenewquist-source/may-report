@@ -137,42 +137,16 @@
             transition: opacity 0.2s;
         }
         img:not(.pointer-events-none):hover {
-            opacity: 0.9;
+            opacity: 0.85;
         }
-
-        /* 瀑布流行容器 */
-        .masonry-row {
-            display: flex;
-            width: 100%;
-            gap: 6px;
-            margin-bottom: 6px;
-        }
-        .masonry-item {
-            position: relative;
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-        .masonry-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* 确保显示完全 */
-            padding: 2px;
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- 图片放大模态框 -->
+    <!-- ==================== 图片放大模态框 (Lightbox) ==================== -->
     <div id="lightbox-modal" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 cursor-zoom-out" onclick="closeLightbox()">
         <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-2xl rounded-lg pointer-events-none" alt="Enlarged View">
-        <div class="absolute top-4 right-4 text-white text-3xl font-bold bg-black/50 w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/80 transition-colors pointer-events-auto" onclick="closeLightbox()">×</div>
+        <div class="absolute top-4 right-4 text-white text-3xl font-bold bg-black/50 w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/80 transition-colors pointer-events-auto cursor-pointer" onclick="closeLightbox()">×</div>
     </div>
 
     <!-- ==================== 第 1 页：封面 & 基建 ==================== -->
@@ -191,7 +165,7 @@
         </header>
 
         <div class="flex gap-6 flex-1 min-h-0">
-            <!-- 核心基建 -->
+            <!-- 核心基建 (无图) -->
             <div class="flex-1 glass-card overflow-hidden">
                 <div class="section-title shrink-0">
                     <i class="fas fa-microchip"></i>
@@ -204,7 +178,7 @@
                         <div class="tag"><i class="fa-solid fa-code-branch mr-1.5"></i>底层逻辑调优</div>
                         <div class="tag"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>UI精细化修正</div>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 tracking-tight">项目步入正轨，稳步构建数字基建</h3>
+                    <h3 class="text-xl font-bold text-slate-800 tracking-tight mt-6">项目步入正轨，稳步构建数字基建</h3>
                     <p class="text-slate-600 leading-relaxed text-sm">
                         本月，“巴拉智绘”AI辅助设计平台迎来关键节点。所有相关商务合同均已正式签署完毕，项目流程全面走上正轨。团队正紧锣密鼓地开展核心算法逻辑的深度调优，并同步进行前端 UI 视觉的精细化修正，确保最终交付产品兼具强大的底层算力与极致的用户体验。
                     </p>
@@ -227,7 +201,7 @@
                         </ul>
                     </div>
                     <div class="w-1/2 flex items-center justify-center relative bg-slate-50 rounded-xl border border-slate-100 p-2">
-                        <img src="说明.png" class="absolute inset-0 w-full h-full object-contain p-2 hover:opacity-100" alt="插件说明" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
+                        <img src="说明.png" class="absolute inset-0 w-full h-full object-contain p-2" alt="插件说明" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
                     </div>
                 </div>
             </div>
@@ -323,15 +297,15 @@
             </p>
             
             <div class="flex gap-6 flex-1 min-h-0">
-                <!-- 22页画册：Hello Summer -->
+                <!-- 22页画册：Hello Summer (6x4 布局) -->
                 <div class="flex-1 flex flex-col min-h-0 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0 mb-3">Hello Summer</div>
-                    <!-- 封面大图 (完美自适应不裁剪) -->
+                    <!-- 封面大图 (自适应比例) -->
                     <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
                          <img src="ext_bookA_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'" onclick="openLightbox(this.src)">
                     </div>
-                    <!-- 内部页面网格 -->
-                    <div class="grid grid-cols-7 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
+                    <!-- 内部页面网格 6 列 -->
+                    <div class="grid grid-cols-6 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=22; i++) {
                                 document.write(`<img src="ext_bookA_${i}.png" class="w-full aspect-[2666/1500] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'" onclick="openLightbox(this.src)">`);
@@ -347,7 +321,7 @@
                     <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
                          <img src="ext_bookB_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'" onclick="openLightbox(this.src)">
                     </div>
-                    <!-- 内部页面网格 -->
+                    <!-- 内部页面网格 5 列 -->
                     <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=16; i++) {
@@ -370,7 +344,7 @@
             </div>
             
             <div class="flex flex-col flex-1 min-h-0 gap-4 mt-2">
-                <!-- 上部分：工作流截图展示 (上下两行排列，空间更大) -->
+                <!-- 上部分：工作流截图展示 -->
                 <div class="flex flex-col gap-4 h-[40%] shrink-0">
                     <div class="flex-1 bg-slate-50 rounded-2xl border border-slate-200 p-3 flex flex-row items-center relative overflow-hidden">
                         <div class="tag bg-white text-xs mr-4 shrink-0 relative z-10 pointer-events-none">画册排版工作流</div>
@@ -386,13 +360,26 @@
                     </div>
                 </div>
 
-                <!-- 下部分：动态排布成品库 -->
+                <!-- 下部分：成品规律矩阵排列 (横竖混排逻辑) -->
                 <div class="flex-1 bg-slate-100 rounded-2xl border border-slate-200 p-4 relative flex flex-col min-h-0">
                     <div class="tag bg-white text-slate-600 mb-3 shrink-0 pointer-events-none w-max">最终成品资产库</div>
                     
-                    <!-- 动态瀑布流容器 -->
-                    <div class="flex-1 w-full overflow-y-auto no-scrollbar" id="ip-masonry-container">
-                        <!-- JS 将在此动态构建基于比例的行 -->
+                    <!-- 使用 6 列 Grid 完美容纳 14张竖图(1格) + 4张横图(跨2格) -->
+                    <div class="grid grid-cols-6 gap-2 flex-1 w-full overflow-y-auto no-scrollbar content-start pb-2">
+                        <script>
+                            // 横图跨2列，竖图占1列。确保第一行丰满。
+                            const wideImages = [5, 12, 15, 16]; 
+                            for(let i=1; i<=18; i++) {
+                                let colSpan = wideImages.includes(i) ? 'col-span-2' : 'col-span-1';
+                                let aspect = wideImages.includes(i) ? 'aspect-[3/2]' : 'aspect-[3/4]';
+                                
+                                document.write(`
+                                <div class="${colSpan} bg-white rounded-md overflow-hidden shadow-sm border border-slate-200 ${aspect}">
+                                    <img src="ip_book_${i}.png" class="w-full h-full object-cover" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
+                                </div>
+                                `);
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -424,15 +411,15 @@
 
                 <hr class="border-slate-100 shrink-0 my-2">
 
-                <!-- 下部分：线稿换装 网格排列 (6列 x 5行) -->
+                <!-- 下部分：线稿换装 严格网格排列 (6列 x 5行) -->
                 <div class="flex-1 flex flex-col bg-slate-50 rounded-[1.5rem] p-5 border border-slate-200 relative min-h-0">
                     <div class="flex justify-between items-start mb-2 relative z-20 shrink-0">
                         <div class="tag bg-white pointer-events-none">故事场景线稿图换装</div>
                     </div>
                     <p class="text-xs text-slate-500 mb-3 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
                     
-                    <!-- 使用致密网格排列，不再堆叠。一行 6 张，共 5 行 -->
-                    <div class="grid grid-cols-6 gap-2 overflow-y-auto no-scrollbar flex-1 pb-2">
+                    <!-- 严格 6列 网格，无堆叠 -->
+                    <div class="grid grid-cols-6 gap-2 overflow-y-auto no-scrollbar flex-1 pb-2 content-start">
                          <script>
                             for(let i=1; i<=30; i++) {
                                 document.write(`
@@ -448,16 +435,13 @@
         </div>
     </div>
 
-    <!-- Script: 处理 Lightbox 和 IP瀑布流排版 -->
+    <!-- Script: 处理 Lightbox 全局放大逻辑 -->
     <script>
-
-        // 1. 全局图片放大镜逻辑 (Lightbox)
         function openLightbox(src) {
             const modal = document.getElementById('lightbox-modal');
             const img = document.getElementById('lightbox-img');
             img.src = src;
             modal.classList.remove('hidden');
-            // 防止背景滚动
             document.body.style.overflow = 'hidden'; 
         }
 
@@ -467,68 +451,6 @@
             document.body.style.overflow = '';
             document.getElementById('lightbox-img').src = '';
         }
-
-        // 2. 第4页：IP 画册动态 Flex 布局计算
-        // 目标：根据图片的宽/高比，动态计算它们在一行中的 flex-basis，使其等高并填满。
-        document.addEventListener('DOMContentLoaded', () => {
-            const ipContainer = document.getElementById('ip-masonry-container');
-            if (!ipContainer) return;
-
-            // 根据您的截图，定义这 18 张图的大致宽/高比
-            // 横图：5, 12, 15, 16
-            // 其他为竖图 (不同竖图可能有微小比例差异，但算法会自动适配)
-            const aspectRatios = [];
-            for (let i = 1; i <= 18; i++) {
-                let ratio = 0.75; // 默认竖图比例 3:4 或更窄
-                if ([5, 12, 15, 16].includes(i)) {
-                    ratio = 1.77; // 横图 16:9
-                }
-                aspectRatios.push({ id: i, ratio: ratio });
-            }
-
-            // 为了美观，打乱顺序并尝试组合，使得每行的总宽高比在一个合理范围内
-            // 简单起见，这里按顺序每 4-5 个一组（混合排列），您可自行调整
-            
-            // 手动设定较好的分组：横竖搭配
-            const rows = [
-                [1, 2, 5, 3, 4],       // 含1横
-                [6, 7, 8, 12, 9],      // 含1横
-                [10, 11, 15, 16],      // 含2横
-                [13, 14, 17, 18]       // 全竖
-            ];
-
-            rows.forEach(rowIds => {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'masonry-row';
-                
-                // 计算该行总宽高比
-                let totalRatio = 0;
-                const rowData = rowIds.map(id => {
-                    const data = aspectRatios.find(a => a.id === id);
-                    totalRatio += data.ratio;
-                    return data;
-                });
-
-                // 创建图片容器
-                rowData.forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'masonry-item';
-                    
-                    // 根据比例分配宽度百分比
-                    const widthPercent = (item.ratio / totalRatio) * 100;
-                    itemDiv.style.flex = `0 0 calc(${widthPercent}% - 6px)`; // 减去 gap 的影响
-                    
-                    // 容器本身需要一个占位高度，通过 padding-bottom 实现 (基于该行总比例)
-                    // 或者依赖图片内容撑开。这里用基于父宽度的 aspect-ratio
-                    itemDiv.style.aspectRatio = item.ratio;
-
-                    itemDiv.innerHTML = `<img src="ip_book_${item.id}.png" onerror="this.closest('.masonry-item').style.display='none'" onclick="openLightbox(this.src)">`;
-                    rowDiv.appendChild(itemDiv);
-                });
-
-                ipContainer.appendChild(rowDiv);
-            });
-        });
     </script>
 
 </body>
