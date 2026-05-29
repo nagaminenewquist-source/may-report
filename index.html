@@ -208,7 +208,6 @@
         </div>
     </div>
 
-
     <!-- ==================== 第 2 页：H5 全栈开发支持 ==================== -->
     <div class="page">
         <div class="glass-card flex-1 min-h-0 flex flex-col">
@@ -284,7 +283,6 @@
         </div>
     </div>
 
-
     <!-- ==================== 第 3 页：外部画册定稿 ==================== -->
     <div class="page">
         <div class="glass-card flex-1 min-h-0 flex flex-col">
@@ -293,19 +291,19 @@
                 <span>四、 视觉支持：外部画册对接与定稿使用</span>
             </div>
             <p class="text-slate-600 text-sm mb-3 shrink-0">
-                高质量承接外部画册视觉需求，本月顺利完成并定稿两本核心画册资产，分别包含 22 页与 16 页的精细化排版输出。
+                高质量承接外部画册视觉需求，本月顺利完成并定稿两本核心画册资产。
             </p>
             
             <div class="flex gap-6 flex-1 min-h-0">
-                <!-- 22页画册：Hello Summer (6x4 布局) -->
+                <!-- 画册：Hello Summer (5列网格排版) -->
                 <div class="flex-1 flex flex-col min-h-0 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0 mb-3">Hello Summer</div>
-                    <!-- 封面大图 (自适应比例) -->
+                    <!-- 封面大图 -->
                     <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
                          <img src="ext_bookA_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'" onclick="openLightbox(this.src)">
                     </div>
-                    <!-- 内部页面网格 6 列 -->
-                    <div class="grid grid-cols-6 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
+                    <!-- 内部页面网格 改为 5 列 -->
+                    <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=22; i++) {
                                 document.write(`<img src="ext_bookA_${i}.png" class="w-full aspect-[2666/1500] object-cover rounded shadow-sm border border-slate-200" onerror="this.style.display='none'" onclick="openLightbox(this.src)">`);
@@ -314,14 +312,14 @@
                     </div>
                 </div>
 
-                <!-- 16页画册：小喫一夏 -->
+                <!-- 画册：小喫一夏 -->
                 <div class="flex-1 flex flex-col min-h-0 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0 mb-3">小喫一夏</div>
                     <!-- 封面大图 -->
                     <div class="w-full shrink-0 flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-3 p-1">
                          <img src="ext_bookB_1.png" class="w-full h-auto max-h-[160px] object-contain" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'" onclick="openLightbox(this.src)">
                     </div>
-                    <!-- 内部页面网格 5 列 -->
+                    <!-- 内部页面网格 -->
                     <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-y-auto no-scrollbar pb-2">
                         <script>
                             for(let i=2; i<=16; i++) {
@@ -334,7 +332,6 @@
         </div>
     </div>
 
-
     <!-- ==================== 第 4 页：自有 IP 画册与动画 ==================== -->
     <div class="page">
         <div class="glass-card flex-1 min-h-0 flex flex-col">
@@ -344,7 +341,7 @@
             </div>
             
             <div class="flex flex-col flex-1 min-h-0 gap-4 mt-2">
-                <!-- 上部分：工作流截图展示 (左右排版) -->
+                <!-- 上部分：工作流截图展示 -->
                 <div class="flex flex-row gap-4 h-[35%] shrink-0">
                     <div class="flex-1 bg-slate-50 rounded-2xl border border-slate-200 p-3 flex flex-col relative overflow-hidden">
                         <div class="tag bg-white text-xs mb-2 shrink-0 relative z-10 pointer-events-none w-max">画册排版工作流</div>
@@ -360,21 +357,16 @@
                     </div>
                 </div>
 
-                <!-- 下部分：成品规律矩阵排列 (横竖混排逻辑) -->
+                <!-- 下部分：成品网格排列 -->
                 <div class="flex-1 bg-slate-100 rounded-2xl border border-slate-200 p-4 relative flex flex-col min-h-0">
                     <div class="tag bg-white text-slate-600 mb-3 shrink-0 pointer-events-none w-max">最终成品资产库</div>
                     
-                    <!-- 使用 6 列 Grid 完美容纳 14张竖图(1格) + 4张横图(跨2格) -->
+                    <!-- 统一网格排版，彻底取消堆叠或混合排版，强制裁剪适配 -->
                     <div class="grid grid-cols-6 gap-2 flex-1 w-full overflow-y-auto no-scrollbar content-start pb-2">
                         <script>
-                            // 横图跨2列，竖图占1列。确保第一行丰满。
-                            const wideImages = [5, 12, 15, 16]; 
                             for(let i=1; i<=18; i++) {
-                                let colSpan = wideImages.includes(i) ? 'col-span-2' : 'col-span-1';
-                                let aspect = wideImages.includes(i) ? 'aspect-[3/2]' : 'aspect-[3/4]';
-                                
                                 document.write(`
-                                <div class="${colSpan} bg-white rounded-md overflow-hidden shadow-sm border border-slate-200 ${aspect}">
+                                <div class="bg-white rounded-md overflow-hidden shadow-sm border border-slate-200 aspect-[3/4]">
                                     <img src="ip_book_${i}.png" class="w-full h-full object-cover" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
                                 </div>
                                 `);
@@ -385,7 +377,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- ==================== 第 5 页：卖火柴的小女孩 ==================== -->
     <div class="page">
@@ -411,14 +402,14 @@
 
                 <hr class="border-slate-100 shrink-0 my-2">
 
-                <!-- 下部分：线稿换装 严格网格排列 (6列 x 5行) -->
+                <!-- 下部分：线稿换装 统一网格排列 -->
                 <div class="flex-1 flex flex-col bg-slate-50 rounded-[1.5rem] p-5 border border-slate-200 relative min-h-0">
                     <div class="flex justify-between items-start mb-2 relative z-20 shrink-0">
                         <div class="tag bg-white pointer-events-none">故事场景线稿图换装</div>
                     </div>
                     <p class="text-xs text-slate-500 mb-3 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
                     
-                    <!-- 严格 6列 网格，无堆叠 -->
+                    <!-- 统一网格排版，彻底取消绝对定位的堆叠效果 -->
                     <div class="grid grid-cols-6 gap-2 overflow-y-auto no-scrollbar flex-1 pb-2 content-start">
                          <script>
                             for(let i=1; i<=30; i++) {
