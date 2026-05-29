@@ -402,19 +402,19 @@
 
                 <hr class="border-slate-100 shrink-0 my-2">
 
-                <!-- 下部分：线稿换装 统一网格排列 -->
+                <!-- 下部分：线稿换装 统一网格排列 (无空隙 11x2) -->
                 <div class="flex-1 flex flex-col bg-slate-50 rounded-[1.5rem] p-5 border border-slate-200 relative min-h-0">
                     <div class="flex justify-between items-start mb-2 relative z-20 shrink-0">
                         <div class="tag bg-white pointer-events-none">故事场景线稿图换装</div>
                     </div>
                     <p class="text-xs text-slate-500 mb-3 relative z-20 shrink-0">基于该故事背景延伸的大量线稿场景进行动态换装视觉产出。</p>
                     
-                    <!-- 统一网格排版，彻底取消绝对定位的堆叠效果 -->
-                    <div class="grid grid-cols-6 gap-2 overflow-y-auto no-scrollbar flex-1 pb-2 content-start">
+                    <!-- 超密集网格排版：11列 x 2行 = 正好填满 22 张，彻底杜绝空白 -->
+                    <div class="grid grid-cols-11 gap-1.5 overflow-hidden flex-1 pb-2 content-start">
                          <script>
-                            for(let i=1; i<=30; i++) {
+                            for(let i=1; i<=22; i++) {
                                 document.write(`
-                                <div class="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm aspect-[9/16]">
+                                <div class="bg-white border border-slate-200 rounded-[4px] overflow-hidden shadow-sm aspect-[9/16]">
                                     <img src="match_look_${i}.png" class="w-full h-full object-cover" onerror="this.style.display='none'" onclick="openLightbox(this.src)">
                                 </div>
                                 `);
