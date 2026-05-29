@@ -304,7 +304,7 @@
                 <!-- 22页画册：Hello Summer -->
                 <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="tag w-max bg-indigo-50 text-indigo-600 border-indigo-200 shrink-0">Hello Summer</div>
-                    <!-- 封面大图 -->
+                    <!-- 封面大图 (完美自适应比例) -->
                     <img src="ext_bookA_1.png" class="w-full aspect-[2666/1500] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2666x1500?text=Cover+A'">
                     <!-- 内部页面网格 -->
                     <div class="grid grid-cols-7 gap-1.5 flex-1 content-start overflow-hidden">
@@ -319,7 +319,7 @@
                 <!-- 16页画册：小喫一夏 -->
                 <div class="flex-1 flex flex-col h-full bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="tag w-max bg-purple-50 text-purple-600 border-purple-200 shrink-0">小喫一夏</div>
-                    <!-- 封面大图 -->
+                    <!-- 封面大图 (完美自适应比例) -->
                     <img src="ext_bookB_1.png" class="w-full aspect-[2338/1653] object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 mb-3" style="max-height: 45%;" onerror="this.src='https://placehold.co/2338x1653?text=Cover+B'">
                     <!-- 内部页面网格 -->
                     <div class="grid grid-cols-5 gap-1.5 flex-1 content-start overflow-hidden">
@@ -373,7 +373,7 @@
                                 // 使用 object-cover 确保无论原图横竖都能漂亮地填满格子
                                 document.write(`
                                 <div class="w-full h-full">
-                                    <img src="ip_anim_${i}.jpg" class="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200" onerror="this.style.display='none'">
+                                    <img src="ip_anim_${i}.png" class="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200" onerror="this.style.display='none'">
                                 </div>`);
                             }
                         </script>
@@ -430,7 +430,7 @@
             
             const isWide = ratio === '16:9';
             const wPercent = config.wPercent || (isWide ? 60 : 30); 
-            const ext = config.ext || 'jpg';
+            const ext = config.ext || 'png';
             
             for(let i=1; i<=count; i++) {
                 const img = document.createElement('img');
